@@ -1,19 +1,20 @@
 var path = require('path');
-var BUILD_DIR = path.resolve(__dirname, 'cms/templates/nadezhda');
+var webpack = require('webpack')
+var BUILD_DIR = path.resolve(__dirname, 'dist/');
 var APP_DIR = path.resolve(__dirname, 'src/');
 var SERVER= path.resolve(__dirname, 'cms/');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
     entry: APP_DIR+'/main.js',
     output: {
         path: BUILD_DIR,
         filename: 'bundle.js'
     },
-    devServer: {
-      public:'mis.my:80',
-      compress: true,
-      publicPath: SERVER
-    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery'
+      })
+    ],
     module: {
         rules: [
           {
@@ -54,7 +55,7 @@ module.exports = {
                 options: {
                   name: "[name].[ext]",
                   outputPath: 'fonts',
-                  publicPath: '/templates/nadezhda/fonts'
+                  publicPath: './src/fonts'
                 }
             }]
           },
@@ -64,8 +65,9 @@ module.exports = {
             use: [{
                 loader: 'file-loader',
                 options: {
+                  name: "[name].[ext]",
                   outputPath: 'images',
-                  publicPath: '/templates/nadezhda/images'
+                  publicPath: './src/images'
                 },
             }]
           }
